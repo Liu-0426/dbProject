@@ -1,0 +1,44 @@
+/* EmployeeList.css */
+.employee-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .employee-table th, .employee-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .employee-table th {
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  .employee-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .employee-table .actions {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .employee-table .actions button {
+    background-color: #0056b3;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .employee-table .actions button:hover {
+    background-color: #004a99;
+  }
+  
