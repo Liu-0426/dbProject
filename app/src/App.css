@@ -1,38 +1,176 @@
-.App {
+/* 重置CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fa;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1000px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 標題 */
+h2, h3 {
+  color: #3e4a59;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h2 {
+  font-size: 28px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h3 {
+  font-size: 24px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* 表單 */
+form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 15px;
+}
+
+input[type="text"],
+input[type="number"] {
+  padding: 12px 18px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #3e8e41;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #4caf50;
   color: white;
+  transition: background-color 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #45a049;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+button:active {
+  background-color: #397c39;
+}
+
+/* 員工列表 */
+div.employee-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+div.employee-card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
+}
+
+div.employee-card:hover {
+  transform: translateX(10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+div.employee-card h3 {
+  margin-top: 0;
+  font-size: 24px;
+  color: #2b3a42;
+}
+
+div.employee-card p {
+  font-size: 16px;
+  color: #777;
+  margin: 5px 0;
+}
+
+/* 按鈕 */
+button.delete,
+button.edit {
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button.delete {
+  background-color: #f44336;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button.delete:hover {
+  background-color: #d32f2f;
+}
+
+button.delete:active {
+  background-color: #b71c1c;
+}
+
+button.edit {
+  background-color: #ff9800;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+button.edit:hover {
+  background-color: #fb8c00;
+}
+
+button.edit:active {
+  background-color: #f57c00;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+    padding: 15px;
   }
-  to {
-    transform: rotate(360deg);
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  button {
+    font-size: 14px;
   }
 }

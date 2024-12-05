@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
 
 const EmployeeForm = () => {
   const [employeeData, setEmployeeData] = useState([]);
@@ -69,7 +70,7 @@ const EmployeeForm = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>員工基本資料</h2>
       <form>
         <input
@@ -105,21 +106,23 @@ const EmployeeForm = () => {
         </button>
       </form>
 
-      <div>
+      <div className="employee-list">
         <h3>員工列表</h3>
         {
           employeeData.map((employee, index) => (
-            <div key={index}>
-              <h2>{employee.name}</h2>
+            <div key={index} className="employee-card">
+              <h3>{employee.name}</h3>
               <p>員工編號: {employee.id}</p>
               <p>職級: {employee.grade}</p>
-              <p>薪資: {employee.pay}</p>
+              <p>薪資: {employee.salary}</p>
               <p>電話號碼: {employee.phoneNumber}</p>
               <p>性別: {employee.gender}</p>
               <p>生日: {employee.birthday}</p>
               <p>入職日期: {employee.employmentDate}</p>
               <p>地址: {employee.address}</p>
               <p>圖片: {employee.image}</p>
+              <button className="edit" onClick={() => handleEditEmployee(employee.id)}>編輯</button>
+              <button className="delete" onClick={() => handleDeleteEmployee(employee.id)}>刪除</button>
             </div>
           ))
         }
