@@ -26,9 +26,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  transition: transform 0.3s ease-in-out;
 }
 
-/* 標題 */
 h2, h3 {
   color: #3e4a59;
   text-align: center;
@@ -40,6 +40,34 @@ h2 {
 
 h3 {
   font-size: 24px;
+}
+
+/* 按鈕區域 */
+.button-group {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.form-button {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  transition: background-color 0.3s ease;
+  width: 120px;
+  text-align: center;
+}
+
+.form-button:hover {
+  background-color: #45a049;
+}
+
+.form-button:active {
+  background-color: #397c39;
 }
 
 /* 表單 */
@@ -81,76 +109,6 @@ button:hover {
 
 button:active {
   background-color: #397c39;
-}
-
-/* 員工列表 */
-div.employee-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-div.employee-card {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease;
-}
-
-div.employee-card:hover {
-  transform: translateX(10px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-div.employee-card h3 {
-  margin-top: 0;
-  font-size: 24px;
-  color: #2b3a42;
-}
-
-div.employee-card p {
-  font-size: 16px;
-  color: #777;
-  margin: 5px 0;
-}
-
-/* 按鈕 */
-button.delete,
-button.edit {
-  padding: 8px 12px;
-  margin-top: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-button.delete {
-  background-color: #f44336;
-  color: white;
-  transition: background-color 0.3s ease;
-}
-
-button.delete:hover {
-  background-color: #d32f2f;
-}
-
-button.delete:active {
-  background-color: #b71c1c;
-}
-
-button.edit {
-  background-color: #ff9800;
-  color: white;
-  transition: background-color 0.3s ease;
-}
-
-button.edit:hover {
-  background-color: #fb8c00;
-}
-
-button.edit:active {
-  background-color: #f57c00;
 }
 
 /* 響應式設計 */
