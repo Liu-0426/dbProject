@@ -12,8 +12,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 20px;
+  min-height: 100vh; /* 改用 min-height */
+  align-items: flex-start; /* 取消垂直置中 */
 }
 
 .container {

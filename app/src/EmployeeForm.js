@@ -86,9 +86,21 @@ const EmployeeForm = () => {
     setNewEmployee(emp);
   };
 
-  const handleSearchEmployee = (id) => {
-    return employeeData.filter((emp) => emp.id === id);
+  const [searchId, setSearchId] = useState(''); // 管理輸入框中的身分證字號
+  const [searchResult, setSearchResult] = useState(null); // 存放查詢結果
+
+  const handleSearch = () => {
+    axios
+      .get(`http://172.24.8.156:9998/employees/search/${searchId}`)
+      .then((response) => {
+        setSearchResult(response.data || null); // 如果後端返回空資料，則設定為 null
+      })
+      .catch((error) => {
+        console.error('There was an error fetching the employee data!', error);
+        setSearchResult(null); // 若發生錯誤，設為 null 表示無資料
+      });
   };
+  
 
   // 動態獲取統計資料
   const handleGradeChange = (e) => {
@@ -109,6 +121,36 @@ const EmployeeForm = () => {
   return (
     <div className="container">
       <h2>員工基本資料</h2>
+      <div className="search-employee">
+    <h3>查詢員工</h3>
+    <input
+      type="text"
+      placeholder="輸入員工身分證字號"
+      value={searchId}
+      onChange={(e) => setSearchId(e.target.value)}
+    />
+    <button type="button" onClick={handleSearch}>
+      查詢
+    </button>
+    {searchResult && (
+      <div className="search-result">
+        <h4>查詢結果：</h4>
+        <p>員工姓名: {searchResult.name}</p>
+        <p>職級: {searchResult.grade}</p>
+        <p>薪資: {searchResult.salary}</p>
+        <p>電話: {searchResult.phone}</p>
+        <p>性別: {searchResult.gender}</p>
+        <p>生日: {searchResult.birthday}</p>
+        <p>錄用日期: {searchResult.employmentDate}</p>
+        <p>地址: {searchResult.address}</p>
+        <p>圖片: {searchResult.image}</p>
+      </div>
+    )}
+    {searchResult === null && <p>查無此員工資料。</p>}
+  </div>
+
+
+
   <form>
     <input
       type="text"
