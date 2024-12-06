@@ -5,16 +5,16 @@ import './App.css';
 const FamilyForm = () => {
   const [familyData, setFamilyData] = useState([]);
   const [newFamily, setNewFamily] = useState({
-    employeeId: '',
-    familyId: '',
-    familyName: '',
+    id: '',
+    relativeId: '',
+    relativeName: '',
     age: '',
-    gender: '',
+    relativeGender: '',
     relationship: '',
     status: '正常',
   });
-  const [searchId, setSearchId] = useState(''); // 查詢的身分證字號
-  const [searchResult, setSearchResult] = useState(null); // 查詢結果
+  const [searchId, setSearchId] = useState('');
+  const [searchResult, setSearchResult] = useState(null);
   const [stats, setStats] = useState({
     averageAge: 0,
     averageAgeMale: 0,
@@ -25,17 +25,18 @@ const FamilyForm = () => {
 
   // 獲取所有眷屬資料並計算統計數據
   useEffect(() => {
-    axios.get('http://172.24.8.156:9998/family/get')
-      .then(response => {
+    axios
+      .get('http://172.24.8.156:9998/relatives/get')
+      .then((response) => {
         setFamilyData(response.data);
 
         // 計算統計數據
         const totalAge = response.data.reduce((sum, family) => sum + Number(family.age), 0);
-        const totalMaleAge = response.data.filter(family => family.gender === 'M').reduce((sum, family) => sum + Number(family.age), 0);
-        const totalFemaleAge = response.data.filter(family => family.gender === 'F').reduce((sum, family) => sum + Number(family.age), 0);
+        const totalMaleAge = response.data.filter((family) => family.relativeGender === 'M').reduce((sum, family) => sum + Number(family.age), 0);
+        const totalFemaleAge = response.data.filter((family) => family.relativeGender === 'F').reduce((sum, family) => sum + Number(family.age), 0);
 
-        const totalMale = response.data.filter(family => family.gender === 'M').length;
-        const totalFemale = response.data.filter(family => family.gender === 'F').length;
+        const totalMale = response.data.filter((family) => family.relativeGender === 'M').length;
+        const totalFemale = response.data.filter((family) => family.relativeGender === 'F').length;
 
         setStats({
           averageAge: totalAge / response.data.length || 0,
@@ -45,26 +46,26 @@ const FamilyForm = () => {
           totalFemale,
         });
       })
-      .catch(error => {
-        console.error('There was an error fetching the family data!', error);
+      .catch((error) => {
+        console.error('Error fetching family data:', error);
       });
   }, []);
 
-  // 查詢功能：根據員工ID或眷屬ID查詢
+  // 查詢功能
   const handleSearch = () => {
-    // 判斷查詢的是員工ID還是眷屬ID
     if (!searchId) {
       setSearchResult(null);
       return;
     }
 
-    axios.get(`http://172.24.8.156:9998/family/search/${searchId}`)
+    axios
+      .get(`http://172.24.8.156:9998/relatives/search/${searchId}`)
       .then((response) => {
-        setSearchResult(response.data || null); // 若無查詢結果，設為null
+        setSearchResult(response.data || null);
       })
       .catch((error) => {
-        console.error('There was an error fetching the family data!', error);
-        setSearchResult(null); // 若發生錯誤，設為null表示無資料
+        console.error('Error searching family data:', error);
+        setSearchResult(null);
       });
   };
 
@@ -72,43 +73,47 @@ const FamilyForm = () => {
     const { name, value } = e.target;
     setNewFamily({
       ...newFamily,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleAddFamily = () => {
-    axios.post('http://172.24.8.156:9998/family/create', newFamily)
-      .then(response => {
+    axios
+      .post('http://172.24.8.156:9998/relatives/create', newFamily)
+      .then((response) => {
         setFamilyData([...familyData, response.data]);
         setNewFamily({
-          employeeId: '',
-          familyId: '',
-          familyName: '',
+          id: '',
+          relativeId: '',
+          relativeName: '',
           age: '',
-          gender: '',
+          relativeGender: '',
           relationship: '',
           status: '正常',
         });
       })
-      .catch(error => {
-        console.error('There was an error adding the family member!', error);
+      .catch((error) => {
+        console.error('Error adding family member:', error);
       });
   };
 
-  const handleDeleteFamily = (id) => {
-    axios.put(`http://172.24.8.156:9998/family/delete/${id}`, { status: '刪除' })
+  const handleDeleteFamily = (relativeId) => {
+    axios
+      .put(`http://172.24.8.156:9998/relatives/delete/${relativeId}`, { status: '刪除' })
       .then(() => {
-        setFamilyData(familyData.map(family =>
-          family.familyId === id ? { ...family, status: '刪除' } : family
-        ));
+        setFamilyData(
+          familyData.map((family) =>
+            family.relativeId === relativeId ? { ...family, status: '刪除' } : family
+          )
+        );
       })
-      .catch(error => {
-        console.error('There was an error deleting the family member!', error);
+      .catch((error) => {
+        console.error('Error deleting family member:', error);
       });
   };
 
-  const handleEditFamily = (id) => {
-    const family = familyData.find((fam) => fam.familyId === id);
+  const handleEditFamily = (relativeId) => {
+    const family = familyData.find((fam) => fam.relativeId === relativeId);
     setNewFamily(family);
   };
 
@@ -121,20 +126,23 @@ const FamilyForm = () => {
         <h3>查詢眷屬資料</h3>
         <input
           type="text"
-          placeholder="輸入員工或眷屬身分證字號"
+          placeholder="輸入員工或眷屬ID"
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
         />
-        <button type="button" onClick={handleSearch}>查詢</button>
+        <button type="button" onClick={handleSearch}>
+          查詢
+        </button>
 
         {searchResult && (
           <div className="search-result">
             <h4>查詢結果：</h4>
-            <p>員工ID: {searchResult.employeeId}</p>
-            <p>眷屬姓名: {searchResult.familyName}</p>
-            <p>關係: {searchResult.relationship}</p>
-            <p>性別: {searchResult.gender}</p>
+            <p>員工ID: {searchResult.id}</p>
+            <p>眷屬ID: {searchResult.relativeId}</p>
+            <p>姓名: {searchResult.relativeName}</p>
+            <p>性別: {searchResult.relativeGender}</p>
             <p>年齡: {searchResult.age}</p>
+            <p>關係: {searchResult.relationship}</p>
             <p>狀態: {searchResult.status}</p>
           </div>
         )}
@@ -142,38 +150,38 @@ const FamilyForm = () => {
         {searchResult === null && <p>查無此資料。</p>}
       </div>
 
-      {/* 眷屬統計 */}
+      {/* 統計資料 */}
       <div className="family-stats">
         <h3>眷屬統計</h3>
-        <p>平均眷屬年齡: {stats.averageAge.toFixed(2)} 歲</p>
+        <p>平均年齡: {stats.averageAge.toFixed(2)} 歲</p>
         <p>男眷屬平均年齡: {stats.averageAgeMale.toFixed(2)} 歲</p>
         <p>女眷屬平均年齡: {stats.averageAgeFemale.toFixed(2)} 歲</p>
         <p>男眷屬人數: {stats.totalMale}</p>
         <p>女眷屬人數: {stats.totalFemale}</p>
       </div>
 
-      {/* 新增眷屬表單 */}
+      {/* 新增眷屬 */}
       <form>
         <input
           type="text"
-          name="employeeId"
-          value={newFamily.employeeId}
+          name="id"
+          value={newFamily.id}
           onChange={handleInputChange}
           placeholder="員工ID"
         />
         <input
           type="text"
-          name="familyId"
-          value={newFamily.familyId}
+          name="relativeId"
+          value={newFamily.relativeId}
           onChange={handleInputChange}
-          placeholder="眷屬身分證字號"
+          placeholder="眷屬ID"
         />
         <input
           type="text"
-          name="familyName"
-          value={newFamily.familyName}
+          name="relativeName"
+          value={newFamily.relativeName}
           onChange={handleInputChange}
-          placeholder="眷屬姓名"
+          placeholder="姓名"
         />
         <input
           type="number"
@@ -184,35 +192,37 @@ const FamilyForm = () => {
         />
         <input
           type="text"
-          name="gender"
-          value={newFamily.gender}
+          name="relativeGender"
+          value={newFamily.relativeGender}
           onChange={handleInputChange}
           placeholder="性別 (M/F)"
-          maxLength={1} // 限制輸入1個字元
         />
         <input
           type="text"
           name="relationship"
           value={newFamily.relationship}
           onChange={handleInputChange}
-          placeholder="與員工關係"
+          placeholder="關係"
         />
-        <button type="button" onClick={handleAddFamily}>新增眷屬資料</button>
+        <button type="button" onClick={handleAddFamily}>
+          新增
+        </button>
       </form>
 
-      {/* 眷屬列表 */}
+      {/* 列表 */}
       <div className="family-list">
-        <h3>眷屬資料列表</h3>
+        <h3>眷屬列表</h3>
         {familyData.map((family) => (
-          <div key={family.familyId} className="family-card">
-            <p>員工ID: {family.employeeId}</p>
-            <p>眷屬姓名: {family.familyName}</p>
-            <p>關係: {family.relationship}</p>
-            <p>性別: {family.gender}</p>
+          <div key={family.relativeId}>
+            <p>員工ID: {family.id}</p>
+            <p>眷屬ID: {family.relativeId}</p>
+            <p>姓名: {family.relativeName}</p>
+            <p>性別: {family.relativeGender}</p>
             <p>年齡: {family.age}</p>
+            <p>關係: {family.relationship}</p>
             <p>狀態: {family.status}</p>
-            <button onClick={() => handleEditFamily(family.familyId)}>編輯</button>
-            <button onClick={() => handleDeleteFamily(family.familyId)}>刪除</button>
+            <button onClick={() => handleEditFamily(family.relativeId)}>編輯</button>
+            <button onClick={() => handleDeleteFamily(family.relativeId)}>刪除</button>
           </div>
         ))}
       </div>
