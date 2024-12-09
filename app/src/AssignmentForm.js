@@ -50,7 +50,7 @@ const AssignmentForm = () => {
 
     // 獲取所有國家的列表
     useEffect(() => {
-      axios.get('http://your-backend-api/countries')  // 假設後端有提供國家列表的API
+      axios.get('http://140.128.102.234:8080/api/country/enumerate')  // 假設後端有提供國家列表的API
         .then(response => {
           setCountries(response.data);  // 設置國家列表
         })

@@ -26,7 +26,7 @@ const FamilyForm = () => {
   // 獲取所有眷屬資料並計算統計數據
   useEffect(() => {
     axios
-      .get('http://172.24.8.156:9998/relatives/get')
+      .get('http://140.128.102.234:4777/api/employeeRelative/enumerate')
       .then((response) => {
         setFamilyData(response.data);
 
@@ -59,7 +59,7 @@ const FamilyForm = () => {
     }
 
     axios
-      .get(`http://172.24.8.156:9998/relatives/search/${searchId}`)
+      .get(`http://172.24.8.156:4777/relatives/search/${searchId}`)
       .then((response) => {
         setSearchResult(response.data || null);
       })
