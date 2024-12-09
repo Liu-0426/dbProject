@@ -3,6 +3,7 @@ import EmployeeForm from './EmployeeForm';
 import CountryForm from './CountryForm';
 import AssignmentForm from './AssignmentForm';
 import FamilyForm from './FamilyForm';
+import CrossForm from './CrossForm';
 import './App.css';
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         <button className="form-button" onClick={() => handleFormChange('country')}>國家表單</button>
         <button className="form-button" onClick={() => handleFormChange('assignment')}>指派表單</button>
         <button className="form-button" onClick={() => handleFormChange('family')}>家庭表單</button>
+        <button className="form-button" onClick={() => handleFormChange('cross')}>跨資料整合表單</button>
       </div>
 
       {/* 根據狀態顯示對應表單 */}
@@ -30,6 +32,7 @@ const App = () => {
       {currentForm === 'country' && <CountryForm />}
       {currentForm === 'assignment' && <AssignmentForm />}
       {currentForm === 'family' && <FamilyForm />}
+      {currentForm === 'cross' && <CrossForm />}
     </div>
   );
 };
