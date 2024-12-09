@@ -121,7 +121,7 @@ const EmployeeForm = () => {
   
 
   const handleDeleteEmployee = (id) => {
-    axios.put(`http://140.128.102.234:8080/api/employee/delete/${id}`, { status: '刪除' })
+    axios.delete(`http://140.128.102.234:4777/api/employee/remove/${id}`, { status: '刪除' })
       .then(() => {
         setEmployeeData(employeeData.map(emp =>
           emp.id === id ? { ...emp, status: '刪除' } : emp
@@ -142,7 +142,7 @@ const EmployeeForm = () => {
 
   const handleSearch = () => {
     axios
-      .get(`http://140.128.102.234:8080/api/employee/query/${searchId}`)
+      .get(`http://140.128.102.234:4777/api/employee/query/${searchId}`)
       .then((response) => {
         setSearchResult(response.data || null); // 如果後端返回空資料，則設定為 null
       })

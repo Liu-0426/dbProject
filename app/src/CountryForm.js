@@ -118,7 +118,7 @@ const CountryForm = () => {
 
   const handleDeleteCountry = (code) => {
     axios
-      .put(`http://140.128.102.234:4777/api/country/delete/${code}`, { status: '刪除' })
+      .delete(`http://140.128.102.234:4777/api/country/remove/${code}`, { status: '刪除' })
       .then(() => {
         setCountryData(countryData.map((country) =>
           country.code === code ? { ...country, status: '刪除' } : country
@@ -282,7 +282,7 @@ const CountryForm = () => {
               <p>聯絡電話: {country.contact}</p>
               <p>是否有外交: {country.isDiploma ? '是' : '否'}</p>
               <button className="edit" onClick={() => handleEditCountry(country.id)}>編輯</button>
-          <button className="delete" onClick={() => handleDeleteCountry(country.id)}>刪除</button>
+          <button className="delete" onClick={() => handleDeleteCountry(country.code)}>刪除</button>
             </div>
           ))
         ) : (
