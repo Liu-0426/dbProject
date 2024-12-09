@@ -7,7 +7,7 @@ const EmployeeForm = () => {
   const [newEmployee, setNewEmployee] = useState({
     id: '',
     name: '',
-    age: '',
+    grade: '',
     salary: '',
     status: '正常',
     phone: '',
@@ -64,8 +64,7 @@ const EmployeeForm = () => {
     const employeePayload = {
       name: newEmployee.name,
       id: newEmployee.id,
-      age: parseInt(newEmployee.age, 10), // 確保轉換為數字
-      grade: 'A++',
+      grade: newEmployee.grade, // 確保轉換為數字
       pay: parseFloat(newEmployee.salary), // 確保轉換為數字
       phoneNumber: newEmployee.phone,
       gender: newEmployee.gender,
@@ -87,7 +86,7 @@ const EmployeeForm = () => {
         setNewEmployee({
           id: '',
           name: '',
-          age: '',
+          grade: '',
           salary: '',
           phone: '',
           gender: '',
@@ -172,6 +171,16 @@ const EmployeeForm = () => {
       });
   }, [selectedGrade]); // 依賴 selectedGrade，當選擇的職等變更時，重新獲取統計資料
   
+  const handlePrint = () => {
+    const printContent = document.getElementById('print-section').innerHTML;
+    const newWindow = window.open('', '', 'width=800,height=600');
+    newWindow.document.write('<html><head><title>列印查詢結果</title></head><body>');
+    newWindow.document.write(printContent);
+    newWindow.document.write('</body></html>');
+    newWindow.document.close();
+    newWindow.print();
+  };
+  
   // 動態獲取統計資料
   const handleGradeChange = (e) => {
     const grade = e.target.value;
@@ -195,6 +204,9 @@ const EmployeeForm = () => {
     />
     <button type="button" onClick={handleSearch}>
       查詢
+    </button>
+    <button type="button" onClick={handlePrint}>
+          列印查詢結果
     </button>
     {searchResult && (
       <div className="search-result">
@@ -232,11 +244,12 @@ const EmployeeForm = () => {
       placeholder="員工姓名"
     />
     <input
-      type="number"
-      name="age"
+      type="text"
+      name="grade"
       value={newEmployee.age}
       onChange={handleInputChange}
-      placeholder="年齡"
+      placeholder="職等 (10位字串)"
+      maxLength={10}
     />
     <input
       type="number"
@@ -299,16 +312,6 @@ const EmployeeForm = () => {
   <div className="employee-stats">
   <h3>員工統計</h3>
   <div>
-    <label htmlFor="grade-select">選擇職等: </label>
-    <select
-      id="grade-select"
-      value={selectedGrade}
-      onChange={handleGradeChange}
-    >
-      {[...Array(maxGrade).keys()].map(i => (
-        <option key={i + 1} value={i + 1}>{i + 1} 職等</option>
-      ))}
-    </select>
   </div>
   <p>員工總數: {stats.totalEmployees}</p>
   <p>平均年齡: {stats.averageAge.toFixed(2)} 歲</p>

@@ -15,7 +15,7 @@ const CountryForm = () => {
     territorialArea: '',
     contact: '',
   });
-  const [searchCode, setSearchCode] = useState('');
+  const [searchCode1, setSearchCode1] = useState('');
   const [statistics, setStatistics] = useState(null); // 用於儲存統計數據
 
   // 獲取國家資料
@@ -116,6 +116,40 @@ const CountryForm = () => {
     newWindow.print();
   };
 
+  const handleDeleteCountry = (code) => {
+    axios
+      .put(`http://140.128.102.234:4777/api/country/delete/${code}`, { status: '刪除' })
+      .then(() => {
+        setCountryData(countryData.map((country) =>
+          country.code === code ? { ...country, status: '刪除' } : country
+        ));
+      })
+      .catch((error) => {
+        console.error('There was an error deleting the country!', error);
+      });
+  };
+
+  const handleEditCountry = (code) => {
+    const country = countryData.find((country) => country.code === code);
+    setNewCountry(country);
+  };
+
+  const [searchCode, setSearchCode] = useState(''); // 管理輸入框中的國家代碼
+  const [searchResult, setSearchResult] = useState(null); // 存放查詢結果
+  const handleSearch = () => {
+    axios
+      .get(`http://140.128.102.234:4777/api/country/query/${searchCode}`)
+      .then((response) => {
+        setSearchResult(response.data || null); // 如果後端返回空資料，則設定為 null
+      })
+      .catch((error) => {
+        console.error('There was an error fetching the country data!', error);
+        setSearchResult(null); // 若發生錯誤，設為 null 表示無資料
+      });
+  };
+  
+
+
   return (
     <div>
       <h2>國家資料</h2>
@@ -206,9 +240,28 @@ const CountryForm = () => {
           onChange={(e) => setSearchCode(e.target.value)}
           placeholder="搜尋國家代碼"
         />
+        <button type="button" onClick={handleSearch}>
+          查詢國家
+        </button>
         <button type="button" onClick={handlePrint}>
           列印查詢結果
         </button>
+        {searchResult && (
+          <div>
+            <h3>查詢結果</h3>
+            <p>國家代碼: {searchResult.code}</p>
+            <p>國家名稱: {searchResult.name}</p>
+            <p>狀態: {searchResult.status}</p>
+            <p>所屬洲名: {searchResult.continent}</p>
+            <p>元首姓名: {searchResult.leadershipName}</p>
+            <p>外交部長姓名: {searchResult.affairsName}</p>
+            <p>聯絡人姓名: {searchResult.contactName}</p>
+            <p>人口數: {searchResult.population}</p>
+            <p>國土面積: {searchResult.territorialArea}</p>
+            <p>聯絡電話: {searchResult.contact}</p>
+            <p>是否有外交: {searchResult.isDiploma ? '是' : '否'}</p>
+          </div>
+        )}
       </div>
 
       {/* 國家列表 */}
@@ -228,6 +281,8 @@ const CountryForm = () => {
               <p>國土面積: {country.territorialArea}</p>
               <p>聯絡電話: {country.contact}</p>
               <p>是否有外交: {country.isDiploma ? '是' : '否'}</p>
+              <button className="edit" onClick={() => handleEditCountry(country.id)}>編輯</button>
+          <button className="delete" onClick={() => handleDeleteCountry(country.id)}>刪除</button>
             </div>
           ))
         ) : (
